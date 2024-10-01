@@ -7,13 +7,14 @@ const __dirname = dirname(__filename);
 
 const file = "fresh.txt";
 const fileContent = "I am fresh and young";
+const resultFile = __dirname + `/files/${file}`;
 
 const create = async () => {
   try {
-    if (fs.existsSync(__dirname + `/files/${file}`)) throw new Error("FS operation failed");
-    fs.writeFileSync(__dirname + `/files/${file}`, fileContent);
+    if (fs.existsSync(resultFile)) throw new Error("FS operation failed").message;
+    return fs.writeFileSync(resultFile, fileContent);
   } catch (error) {
-    console.error(error);
+    process.stderr.write(error + "\n");
   }
 };
 
