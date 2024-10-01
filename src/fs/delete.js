@@ -15,7 +15,7 @@ const remove = async () => {
       .then(() => true)
       .catch(() => false);
 
-    if (!isFileExist) throw new Error("FS operation failed");
+    if (!isFileExist) throw Error("FS operation failed");
 
     await unlink(file);
   } catch (error) {
