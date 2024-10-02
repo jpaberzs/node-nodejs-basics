@@ -15,7 +15,7 @@ const read = async () => {
       .then(() => true)
       .catch(() => false);
 
-    if (!isExisting) throw Error("FS operation failed");
+    if (!isExisting) throw new Error("FS operation failed");
 
     const content = await readFile(file, {
       encoding: "utf-8",
