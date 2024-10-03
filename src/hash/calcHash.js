@@ -24,7 +24,7 @@ const calculateHash = async () => {
   });
 
   input.on("error", (err) => {
-    process.stderr.write(styleText("red", `${err} \n`));
+    process.stderr.write(styleText("red", `${err} 123123\n`));
   });
 };
 
