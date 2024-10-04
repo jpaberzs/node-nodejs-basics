@@ -20,7 +20,7 @@ const list = async () => {
     const allFiles = await readdir(folder);
 
     allFiles.forEach((file) => {
-      process.stderr.write(file + "\n");
+      process.stdout.write(file + "\n");
     });
   } catch (error) {
     process.stderr.write(styleText("red", error + "\n"));
