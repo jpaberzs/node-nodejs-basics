@@ -9,56 +9,30 @@ const __dirname = dirname(__filename);
 const workerFile = join(__dirname, "worker.js");
 
 const performCalculations = async () => {
-  return new Promise((resolve) => {
-    const START_NUM = 10;
+  const START_NUM = 10;
+  const corsLength = availableParallelism();
 
-    const corsLength = availableParallelism();
-    const workers = [];
-    const results = new Array(corsLength);
-
-    let completedWorkers = 0;
-
-    for (let i = 0; i < corsLength; i++) {
+  const results = Array.from({ length: corsLength }, (_, i) => {
+    return new Promise((resolve) => {
       const worker = new Worker(workerFile);
-
       const numberToSend = START_NUM + i;
 
       worker.postMessage(numberToSend);
 
       worker.on("message", (data) => {
-        results[i] = data;
-        completedWorkers++;
-
-        if (completedWorkers === corsLength) resolve(results);
-
+        resolve(data);
         worker.terminate();
       });
 
       worker.on("error", (error) => {
-        results[i] = { status: "error", data: null };
-        completedWorkers++;
-
-        if (completedWorkers === corsLength) resolve(results);
+        resolve(error);
+        worker.terminate();
       });
-
-      worker.on("exit", (code) => {
-        if (code !== 0) {
-          results[i] = { status: "error", data: null };
-          completedWorkers++;
-
-          if (completedWorkers === corsLength) resolve(results);
-        }
-      });
-
-      workers.push(worker);
-    }
+    });
   });
+
+  const finalResults = await Promise.all(results);
+  console.log(finalResults);
 };
 
-await performCalculations()
-  .then((results) => {
-    console.log("Results from workers:", results);
-  })
-  .catch((error) => {
-    console.error("An error occurred:", error);
-  });
+await performCalculations();
