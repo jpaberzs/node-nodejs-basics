@@ -4,7 +4,7 @@ const parseArgs = () => {
 
   argumnets.map((item, index) => {
     if (index % 2 === 0) {
-      process.stdout.write(item + " is ");
+      process.stdout.write(item.slice(2) + " is ");
     } else {
       process.stdout.write(item + (index === argumnets.length - 1 ? "" : ", "));
     }
